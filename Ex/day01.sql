@@ -66,13 +66,13 @@ from employees;
 -- **산술 연산자 사용하기
 -- 정수/정수 소수점까지 계산됨
 select first_name,
-       salary '월급',
+       salary as '월급',
        salary-100 as '월급-식대',
        salary*12 as 연봉,
        salary*12+5000 as 연봉보너스포함,
        salary/30 as 일급,
        employee_id%3 as '워크샵 팀',
-       employee_id/3 정수나누기
+       employee_id/3 as 정수나누기
 from employees;
 
 -- 연산시 문자열은 0으로 처리
@@ -88,12 +88,33 @@ from employees;
 
 
 -- 전체 직원의 정보를 다름과 같이 출력하세요.
-select concat(first_name, '-', last_name) as 성명,
-       salary as 월급,
-	   salary*12 as 연봉,
-       salary*12+5000 as 보너스,
-       phone_number as 전화번호
+select concat(first_name, '-', last_name) as 성명
+       ,phone_number as 전화번호
+       ,salary*12 as 연봉
+       ,salary as 월급
+	   ,salary*12+5000 as 보너스
 from employees;
 
 
+-- *테이블의 컬럼명 
+select first_name,
+	   salary,
+       '(주)개발자' as company,
+       3 as no
+from employees;
 
+-- *mYSQL은 컬럼명을 생략할 수 있다. (오라클은 안됨)
+select first_name,
+	   '(주)개발자' as company
+from employees; -- employees 테이블의 데이터가 107개 이기 땨문에 107개가 출력
+
+select '(주)개발자'
+from dual;   -- 데이터가 없는 가상의 테이블이기 때문에 하나 출력.
+
+select now()
+from regions; -- 데이터의ㅡ 갯수만큼 출력
+
+select now() as 현재시각
+from dual;   -- 가상의 테이블 사용
+
+select now() as 현재시간;  -- from절을 생략할 수 있음(오라클에서는 안됨)
