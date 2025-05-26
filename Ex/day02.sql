@@ -60,7 +60,7 @@
  
 
 
- -- #7 입사일이 04/01/01 에서 05/12/31 사이의 사원의 이름과 입사일을 출력하세요
+ -- #7 입사일이 04/01/01 에서 05/12/31 사이의 사원의 이름과 입사일을 출력하세요.
  select concat(first_name, ' ', last_name) as 성명
         ,hire_date
  from employees
