@@ -156,6 +156,7 @@ select substr('901112-2234567', 8, 1) -- 성별
 from dual;
 
  -- LPAD(str, len, padstr): str 문자열 왼쪽에 padstr 문자열을 추가하여, 전체 문자열의 길이가 len이 되도록 만듬 
+-- RPAD(str, len, padstr):  str 문자열 오른쪽에 padstr 문자열을 추가하여, 전체 문자열의 길이가 len이 되도록 만듬
 select  first_name
 	   ,lpad(first_name, 10, '*') -- 10자를 만드는데, 모자른 글자수는 *로 채워라 (왼쪽부터채우기)
        ,rpad(first_name, 10, '123') -- 10자를 만드는데, 모자른 글자수는 123으로 채워라 (오른쪽부터채우기) 
@@ -170,21 +171,121 @@ select concat('|', '        안녕하세요        '  , '|')
       ,concat('|', rtrim('        안녕하세요        ')  , '|')  -- 오른쪽 공백을 없앤다.
 from dual;
 
--- RPAD(str, len, padstr):  str 문자열 오른쪽에 padstr 문자열을 추가하여, 전체 문자열의 길이가 len이 되도록 만듬
+
+-- REPLACE(str, from_str, to_str): str에서 from_str을 to_str로 변경
+select first_name
+	  ,replace(first_name,'a', '*')  -- 'a' 글자를 '*'로 바꿔라
+      ,replace(first_name,'a', '^&*') -- 'a' 한글자여도 글자수 상관없이 '^&*'로 바뀜
+from employees;
+
+select first_name
+      ,substr(first_name, 2, 3)
+      ,replace(first_name, substr(first_name, 2, 3), '***')
+from employees;      
 
 
 
+-- *단일행함수 -> 날짜함수
+-- CURRENT_DATE() 또는 CURDATE(): 현재 날짜를 반환
+
+-- 날짜
+select current_date() from dual;
+select curdate() from dual;
+
+-- 시간
+select current_time() from dual;
+select curtime() from_dual;
+
+-- 날짜 + 시간
+select current_timestamp() from dual;
+
+-- 날짜,시간 더하기 빼기
+-- ADDDATE() 또는 DATE_ADD(): 날짜 시간 더하기
+select  '2021-06-20 00:00:00'
+		,adddate('2021-06-20 00:00:00', interval 1 year)   -- +1년
+        ,adddate('2021-06-20 00:00:00', interval 1 month)  -- +1달
+        ,adddate('2021-06-20 00:00:00', interval 1 week)   -- +1주
+        ,adddate('2021-06-20 00:00:00', interval 1 day)    -- +1일
+        ,adddate('2021-06-20 00:00:00', interval 1 hour)  -- +1시간
+        ,adddate('2021-06-20 00:00:00', interval 1 minute)-- +1분
+        ,adddate('2021-06-20 00:00:00', interval 1 second) -- +1초
+from dual;
+-- SUBDATE() 또는 DATE_SUB(): 날짜 시간 빼기
+select  '2021-06-20 00:00:00'
+		,subdate('2021-06-20 00:00:00', interval 1 year)   -- +1년
+        ,subdate('2021-06-20 00:00:00', interval 1 month)  -- +1달
+        ,subdate('2021-06-20 00:00:00', interval 1 week)   -- +1주
+        ,subdate('2021-06-20 00:00:00', interval 1 day)    -- +1일
+        ,subdate('2021-06-20 00:00:00', interval 1 hour)  -- +1시간
+        ,subdate('2021-06-20 00:00:00', interval 1 minute)-- +1분
+        ,subdate('2021-06-20 00:00:00', interval 1 second) -- +1초
+from dual;
+
+-- DATEDIFF(): 두 날짜간 일수차 
+-- TIMEDIFF(): 두 날짜시간 간 시간차
+select datediff('2021-06-21 01:05:05', '2021-06-20 01:00:00') 
+	   ,timediff('2021-06-21 01:05:05', '2021-06-20 01:00:00')
+from dual;
+
+select datediff('2025-09-05', '2025-03-27') 
+from dual; -- 수업기간 몇일 굥휴일 포함
+
+select first_name
+       ,datediff('2025-05-26', hire_date)
+       ,datediff(now(), hire_date)   -- 매일 날짜를 고칠 수 없으니 now 라는 현재 날짜 나오는 함수 사용
+       ,datediff(now(), hire_date)/365 -- 몇년 일했는지
+       ,ceil(datediff(now(), hire_date)/365) -- 연차 
+from employees;
+
+-- ---------------------중요함---------------------------------------
+-- *단일행함수 > 변환함수
+-- DATE_FORMAT(date, format): date를 format형식으로 변환
+select  now()
+		,date_format(now(), '%y/%m/%d %h:%i:%s')  -- 소문자 y는 두자리년도
+        ,date_format(now(), '%Y/%M/%D (%p)%H:%i:%s') -- 대문자 Y와 4자리년도,  M은 월이름, D는 일자를 nd,rd,th로 표현, (%p)는 AM,PM 표시, H는 3시->15시
+		,date_format(now(), '%Y/%m/%d %H:%i:%s') -- 많이씀
+from dual;
+
+select first_name
+	   ,date_format(hire_date, '%Y.%m.%d') hire_date
+from employees;
+-- ------------------------------------------------------------
+
+-- 원래 문자열 --> 날짜형(자동으로 변환)
+select datediff('2021-06-22', '2021-06-21')
+from dual;
+-- 문자열 -->날짜형으로 변환 --> 계산
+
+select datediff('2021-Jun-22', '2021-06-21')
+from dual;
+
+select  str_to_date('2021-Jun-22', '%Y-%b-%d')
+	   ,str_to_date('2021-Jun-22', '%Y-%m-%d')
+       ,dattediff
+from dual;
+
+select datediff('2021-Jun-22', '2021-06-21')
+from dual;
+
+-- FORMAT(숫자, p): 숫자에 콤마(,) 를 추가, 소수점 p자리까지 출력
+select  format(123456, 0)
+		,format(1234567.89, 0) -- 소수점은 없애버리면서 자리수 반올림
+        ,format(1234567.88465, 4) -- 소수점 4번째 자리까지 표현하고 그뒤에는 버려줘 (없애버리면서 자리수 반올림)
+        ,format(1234567.88465, -5) -- 소수점 자리수 (-는 안됨) 반올림
+from dual;
 
 
+-- IFNULL(컬럼명, null일때값): 컬럼의 값이 null일때 정해진값을 출력
+select  first_name
+		,commission_pct
+        ,ifnull(commission_pct, '해당없음')
+from employees;
 
 
-
-
-
-
-
-
-
+select  first_name
+		manager_id
+	    ,ifnull(manager_id, '매니저 없음')
+from employees;		
 
 
 
