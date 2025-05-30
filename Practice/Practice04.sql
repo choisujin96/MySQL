@@ -30,11 +30,47 @@ select 	max(salary)
 			,avg(salary)
 from employees;
 
-select *
-from employees
-where salary > 6461.831776
-or salary <  24000.00
 
+select *
+from employees 
+where salary >= 6461.831776
+and salary <=  24000.00
+order by salary asc;
+
+
+select 	e.employee_id
+			,e.first_name
+			,e.salary
+			,s.maxSalary
+            ,s.avgSalary
+from employees e, (select employee_id
+										,max(salary) maxSalary
+										,avg(salary) avgSalary
+							  from employees
+                              group by employee_id) s
+where e.employee_id = s.employee_id;
+
+
+
+
+
+
+
+
+ select 	e.employee_id
+			,e.first_name
+			,e.salary
+			,s.maxSalary
+            ,s.avgSalary
+from employees e, (select	employee_id
+										,avg(salary) avgSalary
+										,max(salary) maxSalary
+							  from employees
+                              group by employee_id) s                     -- > 여기까지는 각각의 테이블이 곱해져서 붙여진 거.(11449개) 
+where e.employee_id = s.employee_id    -- > 같은 번호를 찾아 연결. (107개) 
+and e.salary > 6461.831776 
+or e.salary < 24000.00;
+-- (아직 미완성임)
 
 
 /*
@@ -44,11 +80,58 @@ or salary <  24000.00
 (1건)
 */
 
+select *
+from employees
+where first_name = 'steven'
+and last_name = 'king';
+
+
+
+select 	e.first_name
+		   ,e.last_name
+           ,l.location_id
+           ,l.street_address
+           ,l.postal_code
+           ,l.city
+           l,state_province
+           ,l.country_id
+from employees e
+inner join departments d 
+		   on e.department_id = d.department_id
+inner join locations l
+		   on d.location_id = l.location_id
+where (first_name,last_name) in (select first_name
+														   ,last_name
+											 	 from employees
+												 where first_name = 'steven'
+												 and last_name = 'king');
+
+
+
+
+
 /*
 문제4.
 job_id 가 'ST_MAN' 인 직원의 월급보다 작은 직원의 사번,이름,월급을 월급의 내림차순으로 출력하세요  -ANY연산자 사용
-(74건)
+(74건) 5800~8200
 */
+select *
+from employees
+where job_id = 'ST_MAN';
+
+
+select *
+from employees
+where salary < 8200;
+-- 74
+
+select *
+from employees
+where salary < any (select salary
+							   from employees
+							   where job_id = 'ST_MAN')
+order by salary desc;
+
 
 
 /*
@@ -59,6 +142,23 @@ job_id 가 'ST_MAN' 인 직원의 월급보다 작은 직원의 사번,이름,�
 (11건)
 */
 
+select 	department_id
+			,max(salary)
+from employees e
+group by department_id;
+
+
+select	 employee_id
+			,first_name
+            ,salary
+            ,department_id
+	from employees
+where (department_id, salary) in (select 	department_id
+															,max(salary)
+											 	 from employees e
+												 group by department_id) 
+order by salary desc;
+
 
 /*
 문제6.
@@ -66,6 +166,26 @@ job_id 가 'ST_MAN' 인 직원의 월급보다 작은 직원의 사번,이름,�
 월급 총합이 가장 높은 업무부터 업무명(job_title)과 월급 총합을 조회하시오 
 (19건)
 */
+
+
+select 	department_id
+			,sum(salary) ssum
+from employees
+group by department_id
+order by ssum desc;
+
+
+
+select *
+from employees e, ( select 	department_id
+											,sum(salary) ssum
+								from employees
+								group by department_id
+								order by ssum desc)
+inner join jobs j
+			on e.job_id = j.job_id;
+
+
 
 
 /*
