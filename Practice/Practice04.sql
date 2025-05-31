@@ -197,7 +197,7 @@ select 	department_id
 from employees e, (select employee_id
 					from employees)
 where salary > avg(salary)
-group by department_id
+group by department_id;
 
 
 
