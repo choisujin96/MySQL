@@ -44,10 +44,10 @@ select 	e.employee_id
 			,s.maxSalary
             ,s.avgSalary
 from employees e, (select employee_id
-										,max(salary) maxSalary
-										,avg(salary) avgSalary
-							  from employees
-                              group by employee_id) s
+							,max(salary) maxSalary
+							,avg(salary) avgSalary
+				  from employees
+				  group by employee_id) s
 where e.employee_id = s.employee_id;
 
 
@@ -128,8 +128,8 @@ where salary < 8200;
 select *
 from employees
 where salary < any (select salary
-							   from employees
-							   where job_id = 'ST_MAN')
+				    from employees
+					where job_id = 'ST_MAN')
 order by salary desc;
 
 
@@ -154,9 +154,9 @@ select	 employee_id
             ,department_id
 	from employees
 where (department_id, salary) in (select 	department_id
-															,max(salary)
-											 	 from employees e
-												 group by department_id) 
+											,max(salary)
+								  from employees e
+								  group by department_id) 
 order by salary desc;
 
 
@@ -176,15 +176,13 @@ order by ssum desc;
 
 
 
-select *
-from employees e, ( select 	department_id
-											,sum(salary) ssum
-								from employees
-								group by department_id
-								order by ssum desc)
-inner join jobs j
-			on e.job_id = j.job_id;
-
+select  j.job_title
+	    ,sum(e.salary) as total_salary
+from employees e
+join jobs j
+  on e.job_id = j.job_id
+group by j.job_title
+order by total_salary desc;
 
 
 
@@ -193,6 +191,17 @@ inner join jobs j
 자신의 부서 평균 월급보다 월급(salary)이 많은 직원의 직원번호(employee_id), 이름(first_name)과 월급(salary)을 조회하세요 
 (38건)
 */
+
+select 	department_id
+		,avg(salary)
+from employees e, (select employee_id
+					from employees)
+where salary > avg(salary)
+group by department_id
+
+
+
+
 
 
 /*
