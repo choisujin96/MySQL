@@ -192,12 +192,24 @@ order by total_salary desc;
 (38건)
 */
 
+
 select 	department_id
 		,avg(salary)
-from employees e, (select employee_id
-					from employees)
-where salary > avg(salary)
+from employees e
 group by department_id;
+
+
+
+select 	e.employee_id
+	    ,e.first_name
+        ,e.salary
+from employees e
+join (select 	department_id
+				,avg(salary) as avg_salary
+	  from employees e
+	  group by department_id) d
+  on e.department_id = d.department_id 
+where e.salary > d.avg_salary;
 
 
 
