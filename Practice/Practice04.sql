@@ -47,10 +47,10 @@ select 	e.employee_id
 			,s.maxSalary
             ,s.avgSalary
 from employees e, (select employee_id
-										,max(salary) maxSalary
-										,avg(salary) avgSalary
-							  from employees
-                              group by employee_id) s
+							,max(salary) maxSalary
+							,avg(salary) avgSalary
+				  from employees
+				  group by employee_id) s
 where e.employee_id = s.employee_id;
 
 
@@ -131,8 +131,8 @@ where salary < 8200;
 select *
 from employees
 where salary < any (select salary
-							   from employees
-							   where job_id = 'ST_MAN')
+				    from employees
+					where job_id = 'ST_MAN')
 order by salary desc;
 
 
@@ -158,9 +158,9 @@ select	 employee_id
             ,department_id
 	from employees
 where (department_id, salary) in (select 	department_id
-															,max(salary)
-											 	 from employees e
-												 group by department_id) 
+											,max(salary)
+								  from employees e
+								  group by department_id) 
 order by salary desc;
 
 
@@ -180,9 +180,14 @@ order by ssum desc;
 
 
 
+<<<<<<< HEAD
 
 select   j.job_title
 			,sum(e.salary) as total_salary
+=======
+select  j.job_title
+	    ,sum(e.salary) as total_salary
+>>>>>>> refs/remotes/origin/master
 from employees e
 join jobs j
   on e.job_id = j.job_id
@@ -199,6 +204,7 @@ order by total_salary desc;
 
 
 select 	department_id
+<<<<<<< HEAD
 			,avg(salary)
 from employees e
 group by department_id;
@@ -216,6 +222,28 @@ join (select 	department_id
 	    group by department_id) d
 on e.department_id = d.department_id 
 where e.salary > d.avg_salary;
+=======
+		,avg(salary)
+from employees e
+group by department_id;
+
+
+
+select 	e.employee_id
+	    ,e.first_name
+        ,e.salary
+from employees e
+join (select 	department_id
+				,avg(salary) as avg_salary
+	  from employees e
+	  group by department_id) d
+  on e.department_id = d.department_id 
+where e.salary > d.avg_salary;
+
+
+
+
+>>>>>>> refs/remotes/origin/master
 
 
 /*
