@@ -177,33 +177,28 @@ where j.job_id = 'AC_ACCOUNT';
 (11건)
 */
 
-select 	employee_id
-			,manager_id
-			,first_name
-from employees
-group by employee_id ;
 
 
 select	d.department_id
 			,d.department_name
-            
-from  (select 	employee_id
-						,manager_id
-						,first_name
-		   from employees
-		   group by employee_id ) m
-inner join departments d
-		  on m.department_id = d.department_id
-inner join locations l
-		  on d.location_id = l.location_id
-inner join countries c
-		  on l.country_id = c.country_id
-inner join regions r
-		  on c.region_id = r.region_id;
-
-
-
-
+            ,e.first_name
+            ,l.city
+            ,c.country_name
+            ,r.region_name
+from  	employees e 
+			,departments d
+			,locations l 
+            ,countries c
+			,regions r
+where e.employee_id =d.manager_id
+and d.location_id = l.location_id
+and l.country_id =c.country_id
+and c.region_id = r.region_id;
+						   
+           
+           
+           
+		
 
 
 /*
