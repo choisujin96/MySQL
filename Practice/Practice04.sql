@@ -7,9 +7,11 @@
  select 	avg(salary) 
  from employees;
  
+ 
  select count(*)
  from employees
  where salary < 6461.831776;
+ 
  
  select count(*)
  from employees
@@ -38,6 +40,7 @@ and salary <=  24000.00
 order by salary asc;
 
 
+
 select 	e.employee_id
 			,e.first_name
 			,e.salary
@@ -49,8 +52,6 @@ from employees e, (select employee_id
 							  from employees
                               group by employee_id) s
 where e.employee_id = s.employee_id;
-
-
 
 
 
@@ -87,6 +88,7 @@ and last_name = 'king';
 
 
 
+
 select 	e.first_name
 		   ,e.last_name
            ,l.location_id
@@ -108,8 +110,6 @@ where (first_name,last_name) in (select first_name
 
 
 
-
-
 /*
 문제4.
 job_id 가 'ST_MAN' 인 직원의 월급보다 작은 직원의 사번,이름,월급을 월급의 내림차순으로 출력하세요  -ANY연산자 사용
@@ -120,10 +120,13 @@ from employees
 where job_id = 'ST_MAN';
 
 
+
 select *
 from employees
 where salary < 8200;
 -- 74
+
+
 
 select *
 from employees
@@ -146,6 +149,7 @@ select 	department_id
 			,max(salary)
 from employees e
 group by department_id;
+
 
 
 select	 employee_id
@@ -176,15 +180,14 @@ order by ssum desc;
 
 
 
-select *
-from employees e, ( select 	department_id
-											,sum(salary) ssum
-								from employees
-								group by department_id
-								order by ssum desc)
-inner join jobs j
-			on e.job_id = j.job_id;
 
+select   j.job_title
+			,sum(e.salary) as total_salary
+from employees e
+join jobs j
+  on e.job_id = j.job_id
+group by j.job_title
+order by total_salary desc;
 
 
 
@@ -195,8 +198,35 @@ inner join jobs j
 */
 
 
+select 	department_id
+			,avg(salary)
+from employees e
+group by department_id;
+
+
+
+
+select 	e.employee_id
+			,e.first_name
+			,e.salary
+from employees e
+join (select 	department_id
+					,avg(salary) as avg_salary
+	    from employees e
+	    group by department_id) d
+on e.department_id = d.department_id 
+where e.salary > d.avg_salary;
+
+
 /*
 문제8.
 직원 입사일이 11번째에서 15번째의 직원의 사번, 이름, 월급, 입사일을 입사일 순서로 출력하세요
 */
 
+select 	employee_id
+			,first_name
+            ,salary
+            ,hire_date
+from employees
+order by hire_date asc
+limit 10, 5 ;
