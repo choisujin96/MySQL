@@ -165,7 +165,7 @@ select 	e.employee_id
 from job_history j
 inner join employees e
 		 on j.employee_id = e.employee_id
-where j.job_id = 'AC_ACCOUNT'
+where j.job_id = 'AC_ACCOUNT';
 
 
 
@@ -176,6 +176,32 @@ where j.job_id = 'AC_ACCOUNT'
 그리고 지역구분(regions)의 이름(resion_name)까지 전부 출력해 보세요.
 (11건)
 */
+
+select 	employee_id
+			,manager_id
+			,first_name
+from employees
+group by employee_id ;
+
+
+select	d.department_id
+			,d.department_name
+            
+from  (select 	employee_id
+						,manager_id
+						,first_name
+		   from employees
+		   group by employee_id ) m
+inner join departments d
+		  on m.department_id = d.department_id
+inner join locations l
+		  on d.location_id = l.location_id
+inner join countries c
+		  on l.country_id = c.country_id
+inner join regions r
+		  on c.region_id = r.region_id;
+
+
 
 
 
