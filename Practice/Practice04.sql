@@ -229,4 +229,4 @@ select 	employee_id
             ,hire_date
 from employees
 order by hire_date asc
-limit 10, 5 ;
+limit 10, 5;
