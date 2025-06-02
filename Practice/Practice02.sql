@@ -45,17 +45,17 @@ order by department_id desc;
 
 /*
 문제5.
-업무(job_id)별로 평균임금, 최고임금, 최저임금을 업무아이디(job_id)와 함께 출력하고 정렬순서는 최저임금 내림차순, 평균임금(소수점 반올림), 오름차순 순입니다.
+업무(job_id)별로 평균임금, 최고임금, 최저임금을 업무아이디(job_id)와 
+함께 출력하고 정렬순서는 최저임금 내림차순, 평균임금(소수점 반올림), 오름차순 순입니다.
 (정렬순서는 최소임금 2500 구간일때 확인해볼 것)
 */
 select  job_id
-		  ,round(avg(salary))
-		  ,max(salary)
-          ,min(salary)
+		  ,round(avg(salary)) as avgSalary
+		  ,max(salary) as maxSalary
+          ,min(salary) as minSalary
 from employees
 group by job_id
-order by	round(avg(salary)) asc,  min(salary) desc;   ??
-			  
+order by avgSalary, minSalary desc;			  
 
 
 /*
@@ -143,3 +143,15 @@ order by hire_date desc;
 예) 2005년 08월 20일(토요일)
 */
 
+select 	first_name
+			,hire_date
+from employees
+order by hire_date asc;
+
+-- lex : 2001-01-13
+
+
+select 	first_name as 이름
+			,date_format(hire_date, '%Y년 %m월 %20일 (%W)') as 입사일
+from employees
+where first_name = 'Lex';
