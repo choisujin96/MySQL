@@ -204,26 +204,7 @@ order by total_salary desc;
 
 
 select 	department_id
-<<<<<<< HEAD
 			,avg(salary)
-from employees e
-group by department_id;
-
-
-
-
-select 	e.employee_id
-			,e.first_name
-			,e.salary
-from employees e
-join (select 	department_id
-					,avg(salary) as avg_salary
-	    from employees e
-	    group by department_id) d
-on e.department_id = d.department_id 
-where e.salary > d.avg_salary;
-=======
-		,avg(salary)
 from employees e
 group by department_id;
 
@@ -241,9 +222,6 @@ join (select 	department_id
 where e.salary > d.avg_salary;
 
 
-
-
->>>>>>> refs/remotes/origin/master
 
 
 /*
